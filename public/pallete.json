@@ -1,0 +1,9 @@
+{
+  "internet": {
+    "primary": "#74569b",
+    "secondary": "#96fbc7",
+    "tertiary": "#f7ffae",
+    "quaternary": "#ffb3cb",
+    "quinary": "#d8bfd8"
+  }
+}

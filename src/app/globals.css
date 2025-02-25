@@ -2,20 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Micro 5';
+  src: url('/fonts/Micro5-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #74569b;
+  --color-secondary: #96fbc7;
+  --color-tertiary: #f7ffae;
+  --color-quaternary: #ffb3cb;
+  --color-quinary: #d8bfd8;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.theme-dark {
+  --color-primary: #1a202c;
+  --color-secondary: #2d3748;
+  --color-tertiary: #4a5568;
+  --color-quaternary: #718096;
+  --color-quinary: #a0aec0;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.theme-light {
+  --color-primary: #edf2f7;
+  --color-secondary: #e2e8f0;
+  --color-tertiary: #cbd5e0;
+  --color-quaternary: #a0aec0;
+  --color-quinary: #718096;
+}
+
+.micro-5-regular {
+  font-family: "Micro 5", serif;
+  font-weight: 400;
+  font-style: normal;
 }
