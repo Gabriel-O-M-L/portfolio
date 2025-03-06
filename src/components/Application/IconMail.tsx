@@ -1,8 +1,6 @@
-'use cleint'
 import Image from "next/image";
 import {useState} from "react";
 import Mail from "@/components/Application/Mail";
-import Resume from "@/components/Application/Resume";
 
 export default function IconMail() {
     const [mail, setMail] = useState(false)
