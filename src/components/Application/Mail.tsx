@@ -22,7 +22,7 @@ export default function Mail({toggleMail}: Props) {
     };
 
     return (
-        <Application>
+        <Application initialSize={{width:resize.width, height: resize.height}}>
             <div
                 className="bg-quaternary border-4"
                 style={{
