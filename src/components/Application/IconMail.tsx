@@ -14,7 +14,7 @@ export default function IconMail() {
       <button onClick={toggleMail}>
         <Image src={"/icons/Mail.png"} width={172} height={172} alt={"Mail"}/>
       </button>
-          {mail && <Mail/>}
+          {mail && <Mail toggleMail={toggleMail}/>}
       </>
   );
 }
