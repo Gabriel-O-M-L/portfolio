@@ -1,4 +1,18 @@
-import { useState, useEffect, useRef, ReactNode, CSSProperties, MouseEvent } from 'react';
+import {
+    useState,
+    useEffect,
+    useRef,
+    useImperativeHandle,
+    forwardRef,
+    ReactNode,
+    CSSProperties,
+    MouseEvent
+} from 'react';
+
+export interface ApplicationHandle {
+    resize: (width: number, height: number) => void;
+    moveTo?: (x: number, y: number) => void; // optional if you want later
+}
 
 interface ApplicationProps {
     initialPos?: { x: number; y: number };
@@ -8,13 +22,28 @@ interface ApplicationProps {
     [key: string]: any;
 }
 
-const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, initialSize = { width: 300, height: 300 }, children, ...props }: ApplicationProps) => {
-    const [pos, setPos] = useState<{ x: number; y: number }>(initialPos);
-    const [size, setSize] = useState<{ width: number; height: number }>(initialSize);
-    const [dragging, setDragging] = useState<boolean>(false);
-    const [resizing, setResizing] = useState<boolean>(false);
+const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
+                                                                         initialPos = { x: window.innerWidth / 2, y: window.innerHeight / 4 },
+                                                                         initialSize = { width: 300, height: 300 },
+                                                                         children,
+                                                                         ...props
+                                                                     }, ref) => {
+    const [pos, setPos] = useState(initialPos);
+    const [size, setSize] = useState(initialSize);
+    const [dragging, setDragging] = useState(false);
+    const [resizing, setResizing] = useState(false);
     const [rel, setRel] = useState<{ x: number; y: number } | null>(null);
-    const ref = useRef<HTMLDivElement>(null);
+    const domRef = useRef<HTMLDivElement>(null);
+
+    // 🔌 Expose resize function via ref
+    useImperativeHandle(ref, () => ({
+        resize: (width, height) => {
+            setSize({ width, height });
+        },
+        moveTo: (x, y) => {
+            setPos({ x, y });
+        }
+    }));
 
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
@@ -25,8 +54,8 @@ const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, i
                 const viewportWidth = window.innerWidth;
                 const viewportHeight = window.innerHeight;
 
-                const elementWidth = ref.current?.offsetWidth || 0;
-                const elementHeight = ref.current?.offsetHeight || 0;
+                const elementWidth = domRef.current?.offsetWidth || 0;
+                const elementHeight = domRef.current?.offsetHeight || 0;
 
                 const boundedX = Math.max(0, Math.min(newX, viewportWidth - elementWidth));
                 const boundedY = Math.max(0, Math.min(newY, viewportHeight - elementHeight));
@@ -35,9 +64,9 @@ const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, i
 
                 e.stopPropagation();
                 e.preventDefault();
-            } else if (resizing) {
-                const newWidth = e.pageX - pos.x;
-                const newHeight = e.pageY - pos.y;
+            } else if (resizing && domRef.current) {
+                const newWidth = e.pageX - domRef.current.getBoundingClientRect().left;
+                const newHeight = e.pageY - domRef.current.getBoundingClientRect().top;
 
                 setSize({
                     width: Math.max(100, newWidth),
@@ -57,23 +86,19 @@ const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, i
         };
 
         if (dragging || resizing) {
-            document.addEventListener('mousemove', onMouseMove as unknown as EventListener);
-            document.addEventListener('mouseup', onMouseUp as unknown as EventListener);
-        } else {
-            document.removeEventListener('mousemove', onMouseMove as unknown as EventListener);
-            document.removeEventListener('mouseup', onMouseUp as unknown as EventListener);
+            document.addEventListener('mousemove', onMouseMove as any);
+            document.addEventListener('mouseup', onMouseUp as any);
         }
 
         return () => {
-            document.removeEventListener('mousemove', onMouseMove as unknown as EventListener);
-            document.removeEventListener('mouseup', onMouseUp as unknown as EventListener);
+            document.removeEventListener('mousemove', onMouseMove as any);
+            document.removeEventListener('mouseup', onMouseUp as any);
         };
-    }, [dragging, resizing, rel, pos]);
+    }, [dragging, resizing, rel]);
 
     const onMouseDown = (e: MouseEvent<HTMLDivElement>) => {
-        if (e.button !== 0) return;
-        if (!ref.current) return;
-        const pos = ref.current.getBoundingClientRect();
+        if (e.button !== 0 || !domRef.current) return;
+        const pos = domRef.current.getBoundingClientRect();
         setDragging(true);
         setRel({
             x: e.pageX - pos.left,
@@ -92,7 +117,7 @@ const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, i
 
     return (
         <div
-            ref={ref}
+            ref={domRef}
             onMouseDown={onMouseDown}
             style={{
                 position: 'absolute',
@@ -100,6 +125,8 @@ const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, i
                 top: `${pos.y}px`,
                 width: `${size.width}px`,
                 height: `${size.height}px`,
+                background: '#f9f9f9',
+                boxShadow: '2px 2px 10px rgba(0,0,0,0.1)',
                 ...props.style,
             }}
             {...props}
@@ -114,11 +141,11 @@ const Application = ({ initialPos = { x: screen.width/2, y: screen.height/4 }, i
                     width: '10px',
                     height: '10px',
                     cursor: 'se-resize',
-                    backgroundColor: 'transparent',
+                    backgroundColor: '#ccc',
                 }}
             />
         </div>
     );
-};
+});
 
 export default Application;

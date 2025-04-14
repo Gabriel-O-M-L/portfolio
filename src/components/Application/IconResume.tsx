@@ -3,18 +3,18 @@ import {useState} from "react";
 import Resume from "@/components/Application/Resume";
 
 export default function IconResume() {
-    const [mail, setMail] = useState(false)
+    const [resume, setResume] = useState(false)
 
-    const toggleMail = () => {
-        setMail(!mail)
+    const toggleResume = () => {
+        setResume(!resume)
     }
 
     return (
         <>
-            <button onClick={toggleMail}>
+            <button onClick={toggleResume}>
                 <Image src={"/icons/Resume.png"} width={172} height={172} alt={"Mail"}/>
             </button>
-            {mail && <Resume/>}
+            {resume && <Resume toggleResume={toggleResume} />}
         </>
     );
 }
