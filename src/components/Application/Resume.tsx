@@ -17,7 +17,7 @@ export default function Resume({ toggleResume }: Props) {
 
     return (
         <Application ref={appRef} initialPos={{ x: 100, y: 200 }}>
-            <div className="bg-quaternary w-full h-full border-4">
+            <div className="bg-quaternary w-full h-full border-4 flex flex-col">
                 <div className="bg-primary flex w-full">
                     <h1 className="text-white left-2 relative text-2xl">Resume</h1>
                     <div className="flex justify-center items-center ml-auto pr-0.5">
@@ -26,7 +26,9 @@ export default function Resume({ toggleResume }: Props) {
                         </div>
                     </div>
                 </div>
+                <div className="flex-1 w-full h-0 relative">
+                    <iframe src="/icons/documents/teste.pdf" className="h-full w-full" />
+                </div>
             </div>
         </Application>
-    );
-}
+    )}
