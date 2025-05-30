@@ -11,7 +11,7 @@ import {
 
 export interface ApplicationHandle {
     resize: (width: number, height: number) => void;
-    moveTo?: (x: number, y: number) => void; // optional if you want later
+    moveTo?: (x: number, y: number) => void;
 }
 
 interface ApplicationProps {
@@ -23,11 +23,11 @@ interface ApplicationProps {
 }
 
 const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
-                                                                         initialPos = { x: window.innerWidth / 2, y: window.innerHeight / 4 },
-                                                                         initialSize = { width: 300, height: 300 },
-                                                                         children,
-                                                                         ...props
-                                                                     }, ref) => {
+    initialPos = { x: window.innerWidth / 2, y: window.innerHeight / 4 },
+    initialSize = { width: 300, height: 300 },
+    children,
+    ...props
+    }, ref) => {
     const [pos, setPos] = useState(initialPos);
     const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
@@ -35,7 +35,6 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
     const [rel, setRel] = useState<{ x: number; y: number } | null>(null);
     const domRef = useRef<HTMLDivElement>(null);
 
-    // 🔌 Expose resize function via ref
     useImperativeHandle(ref, () => ({
         resize: (width, height) => {
             setSize({ width, height });

@@ -12,7 +12,7 @@ export default function SleepButton() {
     return (
         <>
             <button onClick={toggleSleep}>
-                <Image src={"/icons/Sleep.png"} width={172} height={172} alt={"power"}/>
+                <Image src={"/icons/Sleep.png"} width={172} height={172} alt={"sleep"}/>
             </button>
         </>
     );
