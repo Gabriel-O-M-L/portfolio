@@ -27,7 +27,7 @@ export default function Resume({ toggleResume }: Props) {
                     </div>
                 </div>
                 <div className="flex-1 w-full h-0 relative">
-                    <iframe src="/icons/documents/teste.pdf" className="h-full w-full" />
+                    <iframe src="/documents/teste.pdf" className="h-full w-full" />
                 </div>
             </div>
         </Application>

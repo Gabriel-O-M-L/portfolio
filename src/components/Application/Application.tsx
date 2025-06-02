@@ -57,7 +57,7 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
                 const elementHeight = domRef.current?.offsetHeight || 0;
 
                 const boundedX = Math.max(0, Math.min(newX, viewportWidth - elementWidth));
-                const boundedY = Math.max(0, Math.min(newY, viewportHeight - elementHeight));
+                const boundedY = Math.max(0, Math.min(newY, viewportHeight - elementHeight) - 48);
 
                 setPos({ x: boundedX, y: boundedY });
 

@@ -12,7 +12,7 @@ export default function IconResume() {
     return (
         <>
             <button onClick={toggleResume} className="w-fit">
-                <Image src={"/icons/Resume.png"} width={172} height={172} alt={"Mail"}/>
+                <Image src={"/icons/Resume.png"} width={172} height={172} alt={"Resume"}/>
             </button>
             {resume && <Resume toggleResume={toggleResume} />}
         </>
