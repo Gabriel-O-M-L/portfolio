@@ -131,7 +131,7 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
         <div
             ref={domRef}
             onMouseDown={onMouseDown}
-            className={`transition-opacity duration-1000 ${visible ? 'opacity-100' : 'opacity-0'}`}
+            className={`transition-opacity duration-600 ${visible ? 'opacity-100' : 'opacity-0'}`}
             style={{
                 position: 'absolute',
                 left: `${pos.x}px`,
