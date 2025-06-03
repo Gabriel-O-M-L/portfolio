@@ -2,7 +2,7 @@
 
 import {useRef, useEffect, useState} from "react";
 import Application, { ApplicationHandle } from "@/components/Application/Application";
-import IconFile from "@/components/Application/IconFile";
+import IconFile from "@/components/Icons/IconFile";
 import Image from "next/image";
 import SpectrogramInfo from "@/components/projectInfo/Spectrogram";
 

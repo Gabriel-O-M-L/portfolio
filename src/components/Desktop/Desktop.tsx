@@ -1,9 +1,9 @@
 import Mail from "@/components/Application/Mail";
 import Resume from "@/components/Application/Resume";
-import Icon from "@/components/Application/IconMail";
-import IconMail from "@/components/Application/IconMail";
-import IconResume from "@/components/Application/IconResume";
-import IconProject from "@/components/Application/IconProject";
+import Icon from "@/components/Icons/IconMail";
+import IconMail from "@/components/Icons/IconMail";
+import IconResume from "@/components/Icons/IconResume";
+import IconProject from "@/components/Icons/IconProject";
 
 export default function Desktop() {
     return (
