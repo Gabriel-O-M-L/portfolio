@@ -25,8 +25,10 @@ interface ApplicationProps {
     [key: string]: any;
 }
 
+const TASKBAR_HEIGHT = 48;
+
 const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
-                                                                         initialPos = { x: window.innerWidth / 2, y: window.innerHeight / 4 },
+                                                                         initialPos = { x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 4 : 0 },
                                                                          initialSize = { width: 300, height: 300 },
                                                                          children,
                                                                          ...props
@@ -52,6 +54,7 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
     useEffect(() => {
         setVisible(true);
     }, []);
+
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
             if (dragging && rel) {
@@ -65,19 +68,25 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
                 const elementHeight = domRef.current?.offsetHeight || 0;
 
                 const boundedX = Math.max(0, Math.min(newX, viewportWidth - elementWidth));
-                const boundedY = Math.max(0, Math.min(newY, viewportHeight - elementHeight) - 48);
+                const boundedY = Math.max(0, Math.min(newY, viewportHeight - elementHeight - TASKBAR_HEIGHT));
 
                 setPos({ x: boundedX, y: boundedY });
 
                 e.stopPropagation();
                 e.preventDefault();
             } else if (resizing && domRef.current) {
-                const newWidth = e.pageX - domRef.current.getBoundingClientRect().left;
-                const newHeight = e.pageY - domRef.current.getBoundingClientRect().top;
+                const rect = domRef.current.getBoundingClientRect();
+                const newWidth = e.pageX - rect.left;
+                const newHeightRaw = e.pageY - rect.top;
+
+                const windowHeight = window.innerHeight;
+                const top = pos.y;
+                const maxHeight = windowHeight - TASKBAR_HEIGHT - top;
+                const newHeight = Math.max(100, Math.min(newHeightRaw, maxHeight));
 
                 setSize({
                     width: Math.max(100, newWidth),
-                    height: Math.max(100, newHeight),
+                    height: newHeight,
                 });
 
                 e.stopPropagation();
@@ -101,11 +110,12 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
             document.removeEventListener('mousemove', onMouseMove as any);
             document.removeEventListener('mouseup', onMouseUp as any);
         };
-    }, [dragging, resizing, rel]);
+        // Array de dependências fixo e literal:
+    }, [dragging, resizing, !!rel, pos.y]);
 
     const onMouseDown = (e: MouseEvent<HTMLDivElement>) => {
         if (e.button !== 0 || !domRef.current) return;
-        // Evita drag se clicar no redimensionador
+
         const target = e.target as HTMLElement;
         if (target.dataset && target.dataset.resize) return;
 
@@ -138,6 +148,8 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
                 top: `${pos.y}px`,
                 width: `${size.width}px`,
                 height: `${size.height}px`,
+                minHeight: '180px',
+                minWidth: '110px',
                 background: '#f9f9f9',
                 boxShadow: '2px 2px 10px rgba(0,0,0,0.1)',
                 zIndex,

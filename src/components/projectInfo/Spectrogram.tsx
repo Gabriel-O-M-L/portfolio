@@ -18,7 +18,7 @@ export default function SpectrogramInfo({ toggleSpectrogram }: Props) {
 
     return (
         <Application ref={appRef} initialPos={{ x: 50, y: 0 }}>
-            <div className="bg-quaternary w-full h-full border-4 flex flex-col ">
+            <div className="bg-quaternary w-full h-full min-w-fit min-h-fit border-4 flex flex-col ">
                 <div className="bg-primary flex w-full">
                     <h1 className="text-white left-2 relative text-2xl">3D Spectrogram</h1>
                     <div className="flex justify-center items-center ml-auto pr-0.5">
