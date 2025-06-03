@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {useEffect, useRef} from "react";
 import Application, {ApplicationHandle} from "@/components/Application/Application";
+import Link from "next/link";
 
 interface Props {
     toggleSpectrogram: () => void;
@@ -19,17 +20,23 @@ export default function SpectrogramInfo({ toggleSpectrogram }: Props) {
         <Application ref={appRef} initialPos={{ x: 50, y: 0 }}>
             <div className="bg-quaternary w-full h-full border-4 flex flex-col ">
                 <div className="bg-primary flex w-full">
-                    <h1 className="text-white left-2 relative text-2xl">Resume</h1>
+                    <h1 className="text-white left-2 relative text-2xl">3D Spectrogram</h1>
                     <div className="flex justify-center items-center ml-auto pr-0.5">
                         <div className="flex bg-quinary w-[20px] h-[20px] justify-center items-center m-1" onClick={toggleSpectrogram}>
                             <Image src="/icons/options/Close.png" width={16} height={16} alt="close" />
                         </div>
                     </div>
                 </div>
-            <div ref={scrollRef} className="prose lg:prose-xl max-w-none mx-auto px-4 py-8 flex-col overflow-y-scroll max-h-fit">
+                <div
+                    ref={scrollRef}
+                    className="prose lg:prose-xl max-w-none mx-auto px-4 py-8 flex-col overflow-y-scroll max-h-fit pt-0 mt-0"
+                >
+                <Link className="text-blue-500" href="https://github.com/FacoBackup/3D-Spectrogram">
+                    https://github.com/FacoBackup/3D-Spectrogram
+                </Link>
                 <h1>3D Spectrogram Renderer</h1>
                 <p>
-                    This C++ project visualizes the frequency and magnitude of an audio signal over time using a 3D spectrogram. It leverages the <strong>Short-Term Fourier Transform (STFT)</strong> to extract time-varying frequency components from an audio file and renders them in a spatial 3D plot.
+                    A C++ project that visualizes the frequency and magnitude of an audio signal over time using a 3D spectrogram. It leverages the <strong>Short-Term Fourier Transform (STFT)</strong> to extract time-varying frequency components from an audio file and renders them in a spatial 3D plot.
                 </p>
 
                 <hr />
@@ -41,9 +48,7 @@ export default function SpectrogramInfo({ toggleSpectrogram }: Props) {
                     width={800}
                     height={450}
                 />
-
                 <hr />
-
                 <h2>🖼 Screenshots</h2>
                 <table>
                     <thead>

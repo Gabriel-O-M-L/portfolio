@@ -11,10 +11,12 @@ export default function IconMail() {
 
   return (
       <>
-      <button onClick={toggleMail} className="w-fit">
-        <Image src={"/icons/Mail.png"} width={172} height={172} alt={"Mail"}/>
-      </button>
-          {mail && <Mail toggleMail={toggleMail}/>}
+          <button onClick={toggleMail} className="w-fit">
+            <Image src={"/icons/Mail.png"} width={172} height={172} alt={"Mail"}/>
+          </button>
+          <div>
+            {mail && <Mail toggleMail={toggleMail}/>}
+          </div>
       </>
   );
 }

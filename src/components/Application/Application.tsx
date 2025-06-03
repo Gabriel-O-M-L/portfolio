@@ -9,6 +9,9 @@ import {
     MouseEvent
 } from 'react';
 
+let globalZIndex = 10;
+const getNextZIndex = () => ++globalZIndex;
+
 export interface ApplicationHandle {
     resize: (width: number, height: number) => void;
     moveTo?: (x: number, y: number) => void;
@@ -23,17 +26,19 @@ interface ApplicationProps {
 }
 
 const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
-    initialPos = { x: window.innerWidth / 2, y: window.innerHeight / 4 },
-    initialSize = { width: 300, height: 300 },
-    children,
-    ...props
-    }, ref) => {
+                                                                         initialPos = { x: window.innerWidth / 2, y: window.innerHeight / 4 },
+                                                                         initialSize = { width: 300, height: 300 },
+                                                                         children,
+                                                                         ...props
+                                                                     }, ref) => {
     const [pos, setPos] = useState(initialPos);
     const [size, setSize] = useState(initialSize);
     const [dragging, setDragging] = useState(false);
     const [resizing, setResizing] = useState(false);
     const [rel, setRel] = useState<{ x: number; y: number } | null>(null);
+    const [zIndex, setZIndex] = useState(getNextZIndex());
     const domRef = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(false);
 
     useImperativeHandle(ref, () => ({
         resize: (width, height) => {
@@ -44,6 +49,9 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
         }
     }));
 
+    useEffect(() => {
+        setVisible(true);
+    }, []);
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
             if (dragging && rel) {
@@ -97,6 +105,11 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
 
     const onMouseDown = (e: MouseEvent<HTMLDivElement>) => {
         if (e.button !== 0 || !domRef.current) return;
+        // Evita drag se clicar no redimensionador
+        const target = e.target as HTMLElement;
+        if (target.dataset && target.dataset.resize) return;
+
+        setZIndex(getNextZIndex());
         const pos = domRef.current.getBoundingClientRect();
         setDragging(true);
         setRel({
@@ -118,6 +131,7 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
         <div
             ref={domRef}
             onMouseDown={onMouseDown}
+            className={`transition-opacity duration-1000 ${visible ? 'opacity-100' : 'opacity-0'}`}
             style={{
                 position: 'absolute',
                 left: `${pos.x}px`,
@@ -126,6 +140,7 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
                 height: `${size.height}px`,
                 background: '#f9f9f9',
                 boxShadow: '2px 2px 10px rgba(0,0,0,0.1)',
+                zIndex,
                 ...props.style,
             }}
             {...props}
@@ -133,6 +148,7 @@ const Application = forwardRef<ApplicationHandle, ApplicationProps>(({
             {children}
             <div
                 onMouseDown={onResizeMouseDown}
+                data-resize="true"
                 style={{
                     position: 'absolute',
                     right: 0,

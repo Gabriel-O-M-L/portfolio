@@ -8,9 +8,11 @@ import IconProject from "@/components/Application/IconProject";
 export default function Desktop() {
     return (
         <div className="bg-tertiary w-screen h-screen flex flex-col">
-            <IconMail/>
-            <IconResume/>
-            <IconProject/>
+            <div className="flex flex-col justify-start h-full">
+                <IconMail/>
+                <IconResume/>
+                <IconProject/>
+            </div>
         </div>
     )
 }

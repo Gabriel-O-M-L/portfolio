@@ -26,12 +26,14 @@ export default function IconProject() {
     return (
         <>
             <button onClick={toggleProject} className="w-fit">
-                <Image src={"/icons/Project.png"} className="left-6 relative top-8" width={100} height={100} alt={"Projects"}/>
+                <Image src={"/icons/project_test.png"}  width={172} height={172} alt={"Projects"}/>
             </button>
-            {Project && <Projects changeProject={changeCurrent} toggleProjectFolder={toggleProjectFolder} toggleProject={toggleProject}  />}
-            {showProjectFolder && Current && DynamicComponent && (
-                <DynamicComponent toggleSpectrogram={toggleProjectFolder} />
-            )}
+            <div>
+                {Project && <Projects changeProject={changeCurrent} toggleProjectFolder={toggleProjectFolder} toggleProject={toggleProject}  />}
+                {showProjectFolder && Current && DynamicComponent && (
+                    <DynamicComponent toggleSpectrogram={toggleProjectFolder} />
+                )}
+            </div>
         </>
     );
 }
